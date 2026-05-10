@@ -1,0 +1,167 @@
+@prefix bom:  <http://ibom.ai/ontology/bom#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ─────────────────────────────────────────────────────────────
+#  Ontology declaration
+# ─────────────────────────────────────────────────────────────
+
+<http://ibom.ai/ontology/bom>
+    a                owl:Ontology ;
+    rdfs:label       "Apex Automotive Bill of Materials Ontology" ;
+    rdfs:comment     """OWL/RDF ontology for the fictional 'Apex Meridian' automotive BOM.
+                        Models a five-variant car range across seven engineering systems,
+                        with assemblies, parts, costs, and weights.
+                        Quantity is modelled via a reified PartLink node so that the same
+                        part URI can appear in multiple assemblies with different quantities.""" .
+
+# ─────────────────────────────────────────────────────────────
+#  Classes
+# ─────────────────────────────────────────────────────────────
+
+bom:Vehicle
+    a                owl:Class ;
+    rdfs:label       "Vehicle" ;
+    rdfs:comment     "A specific car variant (e.g. Apex Meridian Sedan)." .
+
+bom:System
+    a                owl:Class ;
+    rdfs:label       "System" ;
+    rdfs:comment     "A top-level engineering system within a vehicle (e.g. Engine, Chassis)." .
+
+bom:Assembly
+    a                owl:Class ;
+    rdfs:label       "Assembly" ;
+    rdfs:comment     "A named sub-assembly within a system (e.g. Cylinder Head Assembly)." .
+
+bom:Part
+    a                owl:Class ;
+    rdfs:label       "Part" ;
+    rdfs:comment     "A leaf-level manufactured or purchased part (e.g. M8 Bolt)." .
+
+bom:PartLink
+    a                owl:Class ;
+    rdfs:label       "PartLink" ;
+    rdfs:comment     """Reified relationship node connecting an Assembly to a Part with a quantity.
+                        Using reification rather than a plain datatype property on Part allows the
+                        same part URI to appear in multiple assemblies with different quantities,
+                        which reflects real platform-engineering practice (shared parts).""" .
+
+# ─────────────────────────────────────────────────────────────
+#  Object properties
+# ─────────────────────────────────────────────────────────────
+
+bom:hasSystem
+    a                owl:ObjectProperty ;
+    rdfs:label       "hasSystem" ;
+    rdfs:comment     "Relates a Vehicle to one of its engineering Systems." ;
+    rdfs:domain      bom:Vehicle ;
+    rdfs:range       bom:System .
+
+bom:hasAssembly
+    a                owl:ObjectProperty ;
+    rdfs:label       "hasAssembly" ;
+    rdfs:comment     "Relates a System to one of its Assemblies." ;
+    rdfs:domain      bom:System ;
+    rdfs:range       bom:Assembly .
+
+bom:hasPart
+    a                owl:ObjectProperty ;
+    rdfs:label       "hasPart" ;
+    rdfs:comment     "Relates an Assembly to a PartLink (the reified assembly–part relationship)." ;
+    rdfs:domain      bom:Assembly ;
+    rdfs:range       bom:PartLink .
+
+bom:part
+    a                owl:ObjectProperty ;
+    rdfs:label       "part" ;
+    rdfs:comment     "Relates a PartLink to the actual Part it references." ;
+    rdfs:domain      bom:PartLink ;
+    rdfs:range       bom:Part .
+
+# ─────────────────────────────────────────────────────────────
+#  Datatype properties — Vehicle
+# ─────────────────────────────────────────────────────────────
+
+bom:variantCode
+    a                owl:DatatypeProperty ;
+    rdfs:label       "variantCode" ;
+    rdfs:comment     "Short code identifying the vehicle variant. One of: SEDAN, SUV, COUPE, HATCH, ESTATE." ;
+    rdfs:domain      bom:Vehicle ;
+    rdfs:range       xsd:string .
+
+bom:vehicleName
+    a                owl:DatatypeProperty ;
+    rdfs:label       "vehicleName" ;
+    rdfs:comment     "Full human-readable name of the vehicle variant." ;
+    rdfs:domain      bom:Vehicle ;
+    rdfs:range       xsd:string .
+
+# ─────────────────────────────────────────────────────────────
+#  Datatype properties — System
+# ─────────────────────────────────────────────────────────────
+
+bom:systemName
+    a                owl:DatatypeProperty ;
+    rdfs:label       "systemName" ;
+    rdfs:comment     "Human-readable name of the engineering system (e.g. 'Engine')." ;
+    rdfs:domain      bom:System ;
+    rdfs:range       xsd:string .
+
+# ─────────────────────────────────────────────────────────────
+#  Datatype properties — Assembly
+# ─────────────────────────────────────────────────────────────
+
+bom:assemblyName
+    a                owl:DatatypeProperty ;
+    rdfs:label       "assemblyName" ;
+    rdfs:comment     "Human-readable name of the assembly (e.g. 'Cylinder Head Assembly')." ;
+    rdfs:domain      bom:Assembly ;
+    rdfs:range       xsd:string .
+
+# ─────────────────────────────────────────────────────────────
+#  Datatype properties — Part
+# ─────────────────────────────────────────────────────────────
+
+bom:partName
+    a                owl:DatatypeProperty ;
+    rdfs:label       "partName" ;
+    rdfs:comment     "Human-readable name of the part (e.g. 'Exhaust Manifold Gasket')." ;
+    rdfs:domain      bom:Part ;
+    rdfs:range       xsd:string .
+
+bom:partNumber
+    a                owl:DatatypeProperty ;
+    rdfs:label       "partNumber" ;
+    rdfs:comment     "Manufacturer part number (synthetic, fictional)." ;
+    rdfs:domain      bom:Part ;
+    rdfs:range       xsd:string .
+
+bom:unitCostGBP
+    a                owl:DatatypeProperty ;
+    rdfs:label       "unitCostGBP" ;
+    rdfs:comment     "Cost per unit of this part in British pounds sterling." ;
+    rdfs:domain      bom:Part ;
+    rdfs:range       xsd:decimal .
+
+bom:unitWeightKg
+    a                owl:DatatypeProperty ;
+    rdfs:label       "unitWeightKg" ;
+    rdfs:comment     "Weight per unit of this part in kilograms." ;
+    rdfs:domain      bom:Part ;
+    rdfs:range       xsd:decimal .
+
+# ─────────────────────────────────────────────────────────────
+#  Datatype properties — PartLink (reification)
+# ─────────────────────────────────────────────────────────────
+
+bom:quantity
+    a                owl:DatatypeProperty ;
+    rdfs:label       "quantity" ;
+    rdfs:comment     """Number of units of the referenced Part used in the parent Assembly.
+                        Placed on PartLink (not on Part directly) so that the same part can
+                        carry different quantities in different assemblies.""" ;
+    rdfs:domain      bom:PartLink ;
+    rdfs:range       xsd:integer .

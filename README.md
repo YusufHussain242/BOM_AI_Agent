@@ -1,7 +1,9 @@
 # Setup Instructions
 
 ## Clone Repository
-```git clone git@github.com:YusufHussain242/BOM_AI_Agent.git```
+```
+git clone git@github.com:YusufHussain242/BOM_AI_Agent.git
+```
 
 ## Setup Apache Fuseki Server
 
@@ -30,11 +32,40 @@ Navigate to the "Add data page" and upload apex_bom.ttl and ontology.ttl to the 
 
 Create a virtual environment and pip install the necessary requirements:
 
-```python -m venv ./venv``` or  ```python3 -m venv ./venv```
-```source ./venv/bin/activate```
-```pip install requirements.txt```
+```
+python -m venv ./venv
+```
+
+or
+
+```
+python3 -m venv ./venv
+```
+
+then
+
+```
+source ./venv/bin/activate
+```
+
+```
+pip install requirements.txt
+```
+
 
 ### 4.
 
+Create a ```.env``` file and use the following template, filling out details as necessary:
+
+```
+GOOGLE_API_KEY=""
+```
+
+The ```GOOGLE_API_KEY``` can be provided upon requirest.
+
+### 5.
+
 Run the program with:
-```python agent.py``` 
+```
+python agent.py
+``` 
